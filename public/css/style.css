@@ -1,0 +1,41 @@
+.env {
+  border: 1px solid #dddddd;
+  padding: 0 20px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+.job.good{
+  background: #e5ffe5;
+}
+.job.bad{
+  background: #ffeeee;
+}
+@keyframes myfirst
+{
+0% {background: white;}
+50% {background: #eeeeff;}
+100% {background: white;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+0% {background: white;}
+50% {background: #eeeeff;}
+100% {background: white;}
+}
+.job.busy{
+  /*background: #eeeeff;*/
+  animation: myfirst 1s infinite;
+  -webkit-animation: myfirst 1s infinite; /* Safari and Chrome */
+}
+#job-list .job:hover{
+  background: #eeeeff;
+  cursor: pointer;
+}
+body{
+	background-image: url('http://fc01.deviantart.net/fs40/f/2009/038/f/b/Anime_Maid_by_Cybil_kitty.jpg');
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-position: left bottom; 
+	background-size:300px;
+}
