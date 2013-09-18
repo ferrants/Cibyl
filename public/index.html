@@ -3,7 +3,7 @@
   <head>
     <title>Cibyl</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/style.css" rel="stylesheet" media="screen">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="http://code.angularjs.org/1.0.0rc10/angular-cookies-1.0.0rc10.js"></script>
@@ -18,44 +18,45 @@
         <li><a href="#about_modal" data-toggle="modal">About</a></li>
       </ul>
     </div>
+    <div class='container'>
+      <div class='row' ng-controller="JobCtrl">
+        <div class='col-md-3'>
+          <form>
+            <fieldset>
+              <legend>Jobs</legend>
+              <a href='#' ng-click="refresh()">Refresh...</a>
+              <div class="form-group">
+                <label for="job-search">Search</label>
+                <input type="search" od='job-search' class="form-control">
+              </div>
+            </fieldset>
+          </form>
+          <ul class="list-group" id="job-list" >
+            <a href="#" ng-repeat="job in jobs" class='list-group-item job job {{job.class}}' ng-click="meta(job.name)" ng-class="{busy:is_busy(job.name)}">
+              <button class='btn badge' ng-click="run(job.name)">Run</button>
+              <h5 class="list-group-item-heading">{{job.label}}</h5>
+              <p class="list-group-item-text">{{job.description}}</p>
+            </a>
+          </ul>
+        </div>
+        <div class='col-md-9'>
+          <h1>{{loaded_job.label}}</h1>
+          <h3>{{loaded_job.name}}</h3>
+          <p>{{loaded_job.description}}</p>
+          <h3>Steps</h3>
+          <ul href="#" class="list-group">
+            <li ng-repeat="step in loaded_job.steps" class='list-group-item step {{step.class}} {{step.type}}'>
+            {{step.script}}
+            </li>
+          </ul>
 
-    <div class='row' ng-controller="JobCtrl">
-      <div class='col-3'>
-        <form>
-          <fieldset>
-            <legend>Jobs</legend>
-            <a href='#' ng-click="refresh()">Refresh...</a>
-            <div class="form-group">
-              <label for="job-search">Search</label>
-              <input type="search" od='job-search' class="form-control">
-            </div>
-          </fieldset>
-        </form>
-        <ul class="list-group" id="job-list" >
-          <a href="#" ng-repeat="job in jobs" class='list-group-item job job {{job.class}}' ng-click="meta(job.name)" ng-class="{busy:is_busy(job.name)}">
-            <button class='btn badge' ng-click="run(job.name)">Run</button>
-            <h5 class="list-group-item-heading">{{job.label}}</h5>
-            <p class="list-group-item-text">{{job.description}}</p>
-          </a>
-        </ul>
-      </div>
-      <div class='col-9'>
-        <h1>{{loaded_job.label}}</h1>
-        <h3>{{loaded_job.name}}</h3>
-        <p>{{loaded_job.description}}</p>
-        <h3>Steps</h3>
-        <ul href="#" class="list-group">
-          <li ng-repeat="step in loaded_job.steps" class='list-group-item step {{step.class}} {{step.type}}'>
-          {{step.script}}
-          </li>
-        </ul>
-
-        <h3>Config</h3>
-        <pre>
+          <h3>Config</h3>
+          <pre>
 {{loaded_job.pretty}}
-        </pre>
-      </div>
+          </pre>
+        </div>
 
+      </div>
     </div>
 
     <div id="about_modal" class="modal fade" role="dialog" aria-labelledby="about_label">
@@ -100,7 +101,7 @@
     </div>
 
     <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

@@ -5,25 +5,18 @@ mongo:
   db: "cibyl"
 
 jobs:
-    - name: hello_world
-      label: Hello World
-      description: "Just a job... with a job's courage"
+  - name: hello_world
+    label: Hello World
+    description: "Just a job... with a job's courage"
 
-      steps:
-        - type: shell
-          script: scripts/hello_world.sh
+  - name: hello_world2
+    label: Hello World Again
+    description: "Nothing but the pure of heart!"
 
-    - name: hello_world2
-      label: Hello World Again
-      description: "Nothing but the pure of heart!"
+  - name: hello_world3
+    label: Hello World Thrice - no desc
 
-      steps:
-        - type: shell
-          script: scripts/hello_world.sh
-
-    - name: hello_world3
-      label: Hello World Thrice - no desc
-
-      steps:
-        - type: shell
-          script: scripts/hello_world.sh
+repos:
+  - name: user-interface
+  - name: dxansible
+  - name: warehouse

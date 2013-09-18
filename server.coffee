@@ -1,25 +1,56 @@
 express = require 'express'
-# Persistence = require './lib/persistence'
 http = require 'http'
 urlencode = require 'urlencode'
 assert = require 'assert'
+routes = require('./routes/index').routes
+Job = require('./app/models').Job
+Repo = require('./app/models').Repo
+
 require 'js-yaml'
 
 config = false  # static data-model that is loaded
-persistence = false # persistence class wrapper for mongo in this case
 
 config_path =  __dirname + '/content/config.yml'
 console.log "Reading config from: #{config_path}"
 job_map = {}
 config = require config_path
-for job in config.jobs
-  job_map[job.name] = job
 
-console.log config
+load_config = (config) ->
+  load_job = (job_config) ->
+    console.log job_config
+    Job.findOne 'name': job_config.name, (err, jobs) ->
+      assert.ifError err
+      console.log jobs
+      if not jobs
+        console.log "Adding"
+        job = new Job(job_config);
+        console.log job
+        job.save (err) ->
+          assert.ifError err
+      else
+        console.log "Not Adding"
 
-db_connect = (cb=()->) ->
-  persistence = new Persistence config.mongo.host, config.mongo.port, config.mongo.db
-  cb()
+  load_repo = (repo_config) ->
+    console.log repo_config
+    Repo.findOne 'name': repo_config.name, (err, repos) ->
+      assert.ifError err
+      console.log repos
+      if not repos
+        console.log "Adding"
+        repo = new Repo(repo_config);
+        console.log repo
+        repo.save (err) ->
+          assert.ifError err
+      else
+        console.log "Not Adding"
+
+  for job_config in config.jobs
+    load_job job_config
+
+  for repo_config in config.repos
+    load_repo repo_config
+
+load_config config
 
 setup_server = () ->
 
@@ -34,39 +65,13 @@ setup_server = () ->
     console.log "-- Config"
     res.send {"config": config}
 
+  console.log routes
 
-  app.get '/api/job/:job_name', (req, res) ->
-    job_name = req.params.job_name
-    console.log "-- Meta"
-    console.log job_name
-    console.log req.body
-    console.log "Meta of #{job_name}"
-    if job_name of job_map
-      job = job_map[job_name]
-    console.log job
-    res.send {"job": job}
-
-  app.post '/api/job/:job_name/run', (req, res) ->
-    console.log "-- Run"
-    job_name = req.params.job_name
-    console.log job_name
-    console.log req.body
-    console.log "Running #{job_name}"
-    if req.body.name of job_map
-      job = job_map[job_name]
-    console.log job
-    console.log "- Steps:"
-    for step in job.steps
-      console.log step
-    job_map[job_name].busy = true
-    res.send {"success": true}
-
-    unbusy = () ->
-      job_map[job_name].busy = false
-
-    setTimeout unbusy, 5000
+  app.get  '/api/job/:job_name', routes.jobs.get
+  app.post '/api/job/:job_name/run', routes.jobs.run
+  app.get '/api/repos', routes.repos.get
 
   app.listen 8080
   console.log "Listening on port 8080"
 
-db_connect setup_server
+setup_server()

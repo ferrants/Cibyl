@@ -1,6 +1,7 @@
 #!/bin/sh
 echo "Building CoffeeScript Files"
-find . -type f | grep coffee | xargs coffee -c
+ln -s ../../bower_components/bootstrap/dist/ public/lib/bootstrap
+find . -type f | grep -v bower | grep coffee | xargs coffee -c
 
 echo "Running Tests"
 echo "None"
